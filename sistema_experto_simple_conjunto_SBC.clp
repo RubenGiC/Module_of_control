@@ -42,21 +42,25 @@
 
 
 
+(deftemplate respuestas
+	(field like_mat)
+	(field like_hardware)
+	(field like_programming)
+	(field trabajar)
+	(field prefiere_t_p)
+	(field like_work)
+	(field Deduccion_nota_media)
+)
+
 ;;; Inicializo los valores a vacio ;;;
 (defrule valores_default
 =>
-(assert (like_mat DESCONOCIDO))
-(assert (like_hardware DESCONOCIDO))
-(assert (like_programming DESCONOCIDO))
-(assert (trabajar DESCONOCIDO))
-(assert (prefiere_t_p DESCONOCIDO))
-(assert (like_work DESCONOCIDO))
+(assert (respuestas (like_mat DESCONOCIDO) (like_hardware DESCONOCIDO) (like_programming DESCONOCIDO) (trabajar DESCONOCIDO) (prefiere_t_p DESCONOCIDO) (Deduccion_nota_media DESCONOCIDO)))
 (assert (explicacion_csi DESCONOCIDO))
 (assert (explicacion_is DESCONOCIDO))
 (assert (explicacion_ic DESCONOCIDO))
 (assert (explicacion_si DESCONOCIDO))
 (assert (explicacion_ti DESCONOCIDO))
-(assert (Deduccion_nota_media DESCONOCIDO))
 (assert (Conclusion DESCONOCIDO DESCONOCIDO))
 )
 
@@ -227,6 +231,14 @@
 
 )
 
+(defmodule Sruben
+	(export deftemplate ConsejoRuben)
+	(import deftemplate respuestas))
+
+	(deftemplate ConsejoRuben
+		(field Rama)
+		(field Explicacion)
+		(field Experto))
 
 ;;; el sistema expone el porque de la elección de la rama CSI ;;;
 ;;; si le gusta las matematicas o no ;;;
@@ -660,7 +672,8 @@
 
 
 (defmodule Sedu
-	(export deftemplate ConsejoEdu))
+	(export deftemplate ConsejoEdu)
+	(import Preguntas deftemplate respuestas))
 
 	;;; Deftemplate de Consejo ;;;
 	(deftemplate ConsejoEdu
