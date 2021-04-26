@@ -138,7 +138,7 @@
 (like_programming ?prog)
 (Deduccion_nota_media ?nota)
 ?f <- (like_mat ?m)
-(test (or (eq ?y SI) (eq ?y NOLOSE) (eq ?prog SI) (eq ?nota ALTA) (eq ?nota MEDIA)))
+(test (or (neq ?y DESCONOCIDO) (eq ?y NOLOSE) (eq ?prog SI) (eq ?nota ALTA) (eq ?nota MEDIA)))
 (test (eq ?m DESCONOCIDO))
 =>
 (retract ?f)
@@ -167,7 +167,7 @@
 (like_mat ?x)
 (like_hardware ?y)
 ?f <- (like_programming ?m)
-(test (or (eq ?x SI) (eq ?y NO) (eq ?x NOLOSE) (eq ?y NOLOSE)))
+(test (or (eq ?x SI) (neq ?y DESCONOCIDO) (eq ?x NOLOSE) (eq ?y NOLOSE)))
 (test (eq ?m DESCONOCIDO))
 =>
 (retract ?f)
@@ -654,101 +654,105 @@
 (assert (Consejo ?X "Porque no te decides, deberias decidirte ;)" "Ruben Girela"))
 )
 
+;;;;;;;;;Sistema 2;;;;;;;;;
 
-;;;;;;;;;Sistema 2
 
-
-(defmodule SEdu
+	(defmodule Sedu
 	(defrule eligeCSI
-		(or (Mates SI) (Mates Nose))
-		(Prog SI)
+	  (or (Mates SI) (Mates Nose))
+	  (Prog SI)
 
-		=>
-		(assert (elegido Computacion_y_Sistemas_Inteligentes))
+	  =>
+	  (assert (elegido Computacion_y_Sistemas_Inteligentes))
 	)
 
 	(defrule eligeTI
-		(Mates SI)
-		(Prog NO)
-		=>
-		(assert (elegido Tecnologias_de_la_Informacion))
+	  (Mates SI)
+	  (Prog NO)
+	  =>
+	  (assert (elegido Tecnologias_de_la_Informacion))
 	)
 
 	(defrule eligeIS
-		(Mates NO)
-		(nota Baja)
-		=>
-		(assert (elegido Ingenieria_del_Software))
+	  (Mates NO)
+	  (nota Baja)
+	  =>
+	  (assert (elegido Ingenieria_del_Software))
 	)
 
 	(defrule eligeIC
-		(Mates NO)
-		(or (nota Media) (nota Alta))
-		(Hardware SI)
-		=>
-		(assert (elegido Ingenieria_de_Computadores))
+	  (Mates NO)
+	  (or (nota Media) (nota Alta))
+	  (Hardware SI)
+	  =>
+	  (assert (elegido Ingenieria_de_Computadores))
 	)
 
 	(defrule eligeSI
-		(Mates NO)
-		(or (nota Media) (nota Alta))
-		(Hardware NO)
-		=>
-		(assert (elegido Sistemas_de_Informacion))
+	  (Mates NO)
+	  (or (nota Media) (nota Alta))
+	  (Hardware NO)
+	  =>
+	  (assert (elegido Sistemas_de_Informacion))
 
 	)
 
 
 	(defrule Explicaciones1
-		(elegido ?c)
-		(Mates SI)
-		(Prog SI)
-		=>
-		(assert (Explicacion "te gustan las mates y la programacion"))
+	  (elegido ?c)
+	  (Mates SI)
+	  (Prog SI)
+	  =>
+	  (assert (Explicacion "te gustan las mates y la programacion"))
 	)
 
 	(defrule Explicaciones2
-		(elegido ?c)
-		(Mates SI)
-		(Prog NO)
-		=>
-		(assert (Explicacion "te gustan las mates pero no la programacion"))
+	  (elegido ?c)
+	  (Mates SI)
+	  (Prog NO)
+	  =>
+	  (assert (Explicacion "te gustan las mates pero no la programacion"))
 	)
 
 	(defrule Explicaciones3
-		(elegido ?c)
-		(Mates NO)
-		(nota Baja)
-		=>
-		(assert (Explicacion "no te gustan las mates y tienes la nota media baja"))
+	  (elegido ?c)
+	  (Mates NO)
+	  (nota Baja)
+	  =>
+	  (assert (Explicacion "no te gustan las mates y tienes la nota media baja"))
 	)
 
 	(defrule Explicaciones4
-		(elegido ?c)
-		(Mates NO)
-		(or (nota Media) (nota Alta))
-		(Hardware SI)
-		=>
-		(assert (Explicacion "no te gustan las mates, no tienes mala nota y ademas te gusta el Hardware"))
+	  (elegido ?c)
+	  (Mates NO)
+	  (or (nota Media) (nota Alta))
+	  (Hardware SI)
+	  =>
+	  (assert (Explicacion "no te gustan las mates, no tienes mala nota y ademas te gusta el Hardware"))
 	)
 
 	(defrule Explicaciones5
-		(elegido ?c)
-		(Mates NO)
-		(or (nota Media) (nota Alta))
-		(Hardware NO)
-		=>
-		(assert (Explicacion "no te gustan las mates, no tienes mala nota y ademas no te gusta el hardware"))
+	  (elegido ?c)
+	  (Mates NO)
+	  (or (nota Media) (nota Alta))
+	  (Hardware NO)
+	  =>
+	  (assert (Explicacion "no te gustan las mates, no tienes mala nota y ademas no te gusta el hardware"))
 	)
 
 
 	(defrule consejito
-		(elegido ?c)
-		?y
-		=>
-		(assert (Consejo ?c ?y Edu))
+	  (elegido ?c)
+	  ?y
+	  =>
+	  (assert (Consejo ?c ?y Experto Edu))
 	)
 
-	(export (Consejo ?c ?y ?c))
-
+	(defrule imprimir
+	  (Consejo ?c ?y ?x)
+	  =>
+	  (printout t "Hola, soy el experto " ?x crlf)
+	  (printout t "Te recomiendo la rama " ?c crlf)
+	  (printout t "Te la recomiendo porque " ?y crlf)
+	)
 )
