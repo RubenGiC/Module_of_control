@@ -660,7 +660,7 @@
 
 
 (defmodule Sedu
-	(export deftemplate Consejo))
+	(export deftemplate ConsejoEdu))
 
 	;;; Deftemplate de Consejo ;;;
 	(deftemplate ConsejoEdu
@@ -757,11 +757,17 @@
 	  (elegido ?c)
 	  (Explicacion ?y)
 	  =>
-	  (assert (Consejo (Rama ?c) (Explicacion ?y) (Experto Edu)))
+	  (assert (ConsejoEdu (Rama ?c) (Explicacion ?y) (Experto Edu)))
 	)
 
+
+
+
+(defmodule imprimir
+	(import Sedu deftemplate ConsejoEdu))
+
 	(defrule imprimir
-	  (Consejo (Rama ?c) (Explicacion ?y) (Experto ?x))
+	  (ConsejoEdu (Rama ?c) (Explicacion ?y) (Experto ?x))
 	  =>
 	  (printout t "Hola, soy el experto " ?x crlf)
 	  (printout t "Te recomiendo la rama " ?c crlf)
