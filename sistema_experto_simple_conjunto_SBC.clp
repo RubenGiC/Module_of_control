@@ -40,6 +40,8 @@
 (Rama Tecnologias_de_la_Informacion)
 )
 
+
+
 ;;; Inicializo los valores a vacio ;;;
 (defrule valores_default
 =>
@@ -657,7 +659,15 @@
 ;;;;;;;;;Sistema 2;;;;;;;;;
 
 
-	(defmodule Sedu
+(defmodule Sedu
+
+	;;; Deftemplate de Consejo ;;;
+	(deftemplate ConsejoEdu
+		(field Rama)
+		(field Explicacion)
+		(field Experto))
+
+	(export deftemplate Consejo))
 	(defrule eligeCSI
 	  (or (Mates SI) (Mates Nose))
 	  (Prog SI)
@@ -665,6 +675,8 @@
 	  =>
 	  (assert (elegido Computacion_y_Sistemas_Inteligentes))
 	)
+
+
 
 	(defrule eligeTI
 	  (Mates SI)
@@ -743,16 +755,15 @@
 
 	(defrule consejito
 	  (elegido ?c)
-	  ?y
+	  (Explicacion ?y)
 	  =>
-	  (assert (Consejo ?c ?y Experto Edu))
+	  (assert (Consejo (Rama ?c) (Explicacion ?y) (Experto Edu)))
 	)
 
 	(defrule imprimir
-	  (Consejo ?c ?y ?x)
+	  (Consejo (Rama ?c) (Explicacion ?y) (Experto ?x))
 	  =>
 	  (printout t "Hola, soy el experto " ?x crlf)
 	  (printout t "Te recomiendo la rama " ?c crlf)
 	  (printout t "Te la recomiendo porque " ?y crlf)
 	)
-)
