@@ -63,7 +63,7 @@
 (declare (salience 9999))
 =>
 (printout t "Bienvenido al Sistema Experto Simple de Ruben Girela" crlf)
-)
+) 
 
 
 ;;; deduce si la nota media es baja ;;;
@@ -129,7 +129,7 @@
 
 =>
 (printout t "El experto " ?Z " le recomienda escoger la rama " ?X ", " ?Y   crlf)
-)
+) 
 
 
 ;;; Pregunta si le gusta las matematicas ;;;
@@ -138,7 +138,7 @@
 (like_programming ?prog)
 (Deduccion_nota_media ?nota)
 ?f <- (like_mat ?m)
-(test (or (eq ?y SI) (eq ?y NOLOSE) (eq ?prog SI) (eq ?nota ALTA) (eq ?nota MEDIA)))
+(test (or (neq ?y DESCONOCIDO) (eq ?y NOLOSE) (eq ?prog SI) (eq ?nota ALTA) (eq ?nota MEDIA)))
 (test (eq ?m DESCONOCIDO))
 =>
 (retract ?f)
@@ -167,7 +167,7 @@
 (like_mat ?x)
 (like_hardware ?y)
 ?f <- (like_programming ?m)
-(test (or (eq ?x SI) (eq ?y NO) (eq ?x NOLOSE) (eq ?y NOLOSE)))
+(test (or (eq ?x SI) (neq ?y DESCONOCIDO) (eq ?x NOLOSE) (eq ?y NOLOSE)))
 (test (eq ?m DESCONOCIDO))
 =>
 (retract ?f)
@@ -643,7 +643,7 @@
 	(test (neq ?Y DESCONOCIDO))
 =>
 (assert (Consejo ?X ?Y "Ruben Girela"))
-)
+) 
 
 (defrule aconsejar2
 	(Conclusion ?X ?Y)
@@ -652,10 +652,9 @@
 	(test (eq ?Y DESCONOCIDO))
 =>
 (assert (Consejo ?X "Porque no te decides, deberias decidirte ;)" "Ruben Girela"))
-)
+) 
 
-
-;;;;;;;;;Sistema 2
+;;;;;;;;;Sistema 2;;;;;;;;;
 
 
 
