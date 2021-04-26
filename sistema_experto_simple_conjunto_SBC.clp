@@ -660,6 +660,7 @@
 
 
 (defmodule Sedu
+	(export deftemplate Consejo))
 
 	;;; Deftemplate de Consejo ;;;
 	(deftemplate ConsejoEdu
@@ -667,7 +668,6 @@
 		(field Explicacion)
 		(field Experto))
 
-	(export deftemplate Consejo))
 	(defrule eligeCSI
 	  (or (Mates SI) (Mates Nose))
 	  (Prog SI)
