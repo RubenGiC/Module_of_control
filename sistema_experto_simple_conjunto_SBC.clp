@@ -57,21 +57,80 @@
 		(field Deduccion_nota_media)
 	)
 
-	(defrule meter_respuestas_template
-		(like_mat ?a)
-		(like_hardware ?b)
-		(like_programming ?c)
-		(trabajar ?d)
-		(prefiere_t_p ?e)
-		(like_work ?f)
-		(Deduccion_nota_media ?g)
-		(test (neq ?a "DESCONOCIDO"))
-		(test (neq ?b "DESCONOCIDO"))
-		(test (neq ?c "DESCONOCIDO"))
-		(test (neq ?f "DESCONOCIDO"))
+
+
+	(defrule cambiar_mat
+	  (declare (salience -9999))
+		?w<-(like_mat ?a)
+		(test (neq ?a "DESCONOCIDO")) ;; Esto ha cambiado de valor
+		?f<-(respuestas (like_mat ?b))  ;; el unico template que existe de esto
 		=>
-		(assert (respuestas (like_mat ?a) (like_hardware ?b) (like_programming ?c) (trabajar ?d) (prefiere_t_p ?e) (like_work ?f)(Deduccion_nota_media ?g)))
+		(modify ?f (like_mat ?a))
+		(retract ?w)
 	)
+
+	(defrule cambiar_hardware
+	(declare (salience -9999))
+		?w<-(like_hardware ?a)
+		(test (neq ?a "DESCONOCIDO")) ;; Esto ha cambiado de valor
+		?f<-(respuestas (like_mat ?b))  ;; el unico template que existe de esto
+		=>
+		(modify ?f (like_hardware ?a))
+		(retract ?w)
+	)
+
+	(defrule cambiar_prg
+	  (declare (salience -9999))
+		?w<-(like_programming ?a)
+		(test (neq ?a "DESCONOCIDO")) ;; Esto ha cambiado de valor
+		?f<-(respuestas (like_mat ?b))  ;; el unico template que existe de esto
+		=>
+		(modify ?f (like_programming ?a))
+		(retract ?w)
+	)
+
+	(defrule cambiar_trabjar
+	  (declare (salience -9999))
+		?w<-(trabajar ?a)
+		(test (neq ?a "DESCONOCIDO")) ;; Esto ha cambiado de valor
+		?f<-(respuestas (like_mat ?b))  ;; el unico template que existe de esto
+		=>
+		(modify ?f (trabajar ?a))
+		(retract ?w)
+	)
+
+	(defrule cambiar_t_p
+	  (declare (salience -9999))
+		?w<-(prefiere_t_p ?a)
+		(test (neq ?a "DESCONOCIDO")) ;; Esto ha cambiado de valor
+		?f<-(respuestas (like_mat ?b))  ;; el unico template que existe de esto
+		=>
+		(modify ?f (prefiere_t_p ?a))
+		(retract ?w)
+	)
+
+	(defrule cambiar_work
+	  (declare (salience -9999))
+		?w<-(like_work ?a)
+		(test (neq ?a "DESCONOCIDO")) ;; Esto ha cambiado de valor
+		?f<-(respuestas (like_mat ?b))  ;; el unico template que existe de esto
+		=>
+		(modify ?f (like_work ?a))
+		(retract ?w)
+	)
+
+	(defrule cambiar_nota
+	  (declare (salience -9999))
+		?w<-(Deduccion_nota_media ?a)
+		(test (neq ?a "DESCONOCIDO")) ;; Esto ha cambiado de valor
+		?f<-(respuestas (like_mat ?b))  ;; el unico template que existe de esto
+		=>
+		(modify ?f (Deduccion_nota_media ?a))
+		(retract ?w)
+	)
+
+
+
 
 	;;; Inicializo los valores a vacio ;;;
 	(defrule valores_default
@@ -89,6 +148,7 @@
 	(assert (explicacion_ti DESCONOCIDO))
 	(assert (Deduccion_nota_media DESCONOCIDO))
 	(assert (Conclusion DESCONOCIDO DESCONOCIDO))
+	(assert (respuestas (like_mat DESCONOCIDO) (like_hardware DESCONOCIDO) (like_programming DESCONOCIDO) (trabajar DESCONOCIDO) (prefiere_t_p DESCONOCIDO) (like_work DESCONOCIDO) (Deduccion_nota_media DESCONOCIDO)))
 	)
 
 	;;; Le da la bienvenida al usuario ;;;
