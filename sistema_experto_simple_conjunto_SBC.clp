@@ -342,6 +342,17 @@
 			(assert (Deduccion_nota_media ?g))
 		)
 
+		(defrule inicio
+		=>
+		(assert (explicacion_csi DESCONOCIDO))
+		(assert (explicacion_is DESCONOCIDO))
+		(assert (explicacion_ic DESCONOCIDO))
+		(assert (explicacion_si DESCONOCIDO))
+		(assert (explicacion_ti DESCONOCIDO))
+		(assert (Deduccion_nota_media DESCONOCIDO))
+		(assert (Conclusion DESCONOCIDO DESCONOCIDO))
+		)
+
 		;;; el sistema expone el porque de la elección de la rama CSI ;;;
 		;;; si le gusta las matematicas o no ;;;
 		(defrule porque_csi_matematicas_si
@@ -754,7 +765,6 @@
 	;;; imprimo la decisión que toma el sistema experto simple ;;;
 	(defrule aconsejar
 		(Conclusion ?X ?Y)
-		(Rama ?X)
 		(test ( neq ?X DESCONOCIDO))
 		(test (neq ?Y DESCONOCIDO))
 	=>
@@ -763,7 +773,6 @@
 
 	(defrule aconsejar2
 		(Conclusion ?X ?Y)
-		(Rama ?X)
 		(test ( neq ?X DESCONOCIDO))
 		(test (eq ?Y DESCONOCIDO))
 	=>
@@ -920,7 +929,7 @@
 				?f<-(ConsejoRuben (Rama ?r) (Explicacion ?u) (Experto ?v))
 				(test (neq ?c ?r))
 				=>
-				(printout t "Los expertos " ?x " y " ?v " no coinciden en la rama que deberías tomar" crlf)
+				(printout t "Los expertos " ?x " y " ?v " no coinciden en la rama que deberias tomar" crlf)
 				(printout t "El experto " ?x " dice que la mejor rama para ti es " ?c crlf)
 				(printout t "Sus razones son: " ?y crlf)
 				(printout t "Por otro lado, el experto " ?v " te recomienda la rama " ?r crlf)
@@ -935,11 +944,4 @@
 				=>
 				(printout t "Además, el experto " ?v " también te recomienda la rama " ?r crlf)
 				(printout t "Las razones son: " ?u)
-			)
-
-			(defrule prueba
-				(ConsejoEdu (Rama ?c) (Explicacion ?y) (Experto ?x))
-			=>
-			(printout t "Los expertos " ?x " coinciden en que la rama que debes tomar es " ?c crlf)
-			(printout t "El experto " ?x " te la recomienda por: " ?y crlf)
 			)
