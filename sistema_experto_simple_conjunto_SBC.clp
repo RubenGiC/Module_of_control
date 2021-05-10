@@ -467,6 +467,13 @@
 		=>
 		(assert (porque_ic "te gusta el hardware, "))
 		)
+		;;; le gusta las matematicas;;;
+		(defrule porque_ic_mates_si
+		(like_mat ?mat)
+		(test (eq ?mat SI))
+		=>
+		(assert (porque_ic "te gusta las matematicas, "))
+		)
 		;;;le gusta trabajar en una empresa publica;;;
 		(defrule porque_ic_publica
 		(like_work ?w)
@@ -519,6 +526,13 @@
 		(test (eq ?t PRACTICA))
 		=>
 		(assert (porque_si "te gusta la practica, "))
+		)
+		;;;le gusta la teoria;;;
+		(defrule porque_si_teoria
+		(prefiere_t_p ?t)
+		(test (eq ?t TEORIA))
+		=>
+		(assert (porque_si "te gusta la teoria, "))
 		)
 		;;;le gusta la teoria y la practica ;;;
 		(defrule porque_si_ambos
@@ -734,12 +748,10 @@
 		(defrule elegir_si
 		(declare (salience -999))
 		(like_hardware ?hardware)
-		(prefiere_t_p ?tp)
 		(trabajar ?como_trabajar)
 		(explicacion_si ?pq)
 
 		(test (or (eq ?hardware NO) (eq ?hardware DESCONOCIDO)))
-		(test (or (eq ?tp PRACTICA) (eq ?tp AMBAS) (eq ?tp DESCONOCIDO) (eq ?tp NOLOSE)))
 		(test (or (eq ?como_trabajar POCO) (eq ?como_trabajar NORMAL) (eq ?como_trabajar NOLOSE) (eq ?como_trabajar DESCONOCIDO)))
 		=>
 		(assert (Conclusion Sistemas_de_Informacion ?pq))
@@ -906,42 +918,44 @@
 
 
 
-		(defmodule imprimir
-			(import Sedu deftemplate ConsejoEdu)
-			(import Sruben deftemplate ConsejoRuben))
+	(defmodule imprimir
+		(import Sedu deftemplate ConsejoEdu)
+		(import Sruben deftemplate ConsejoRuben))
 
-			(defrule imprimir_iguales
-				(declare (salience 9999))
-				(ConsejoEdu (Rama ?c) (Explicacion ?y) (Experto ?x))
-				?f<-(ConsejoRuben (Rama ?r) (Explicacion ?u) (Experto ?v))
-				(test (eq ?c ?r))
-				=>
-				(printout t "Los expertos " ?x " y " ?v " coinciden en que la rama que debes tomar es " ?c crlf)
-				(printout t "El experto " ?x " te la recomienda por: " ?y crlf)
-				(printout t "El experto " ?v " te la recomienda por: " ?u crlf)
-				(assert (iguales si))
-				(retract ?f)
-			)
+		(defrule imprimir_iguales
+			(declare (salience 9999))
+			?g<-(ConsejoEdu (Rama ?c) (Explicacion ?y) (Experto ?x))
+			?f<-(ConsejoRuben (Rama ?r) (Explicacion ?u) (Experto ?v))
+			(test (eq ?c ?r))
+			=>
+			(printout t "Los expertos " ?x " y " ?v " coinciden en que la rama que debes tomar es " ?c crlf)
+			(printout t "El experto " ?x " te la recomienda por: " ?y crlf)
+			(printout t "El experto " ?v " te la recomienda por: " ?u crlf)
+			(assert (iguales si))
+			(retract ?f)
+			(retract ?g)
+		)
 
-			(defrule imprimir_distintos
-				(declare (salience -9999))
-				(ConsejoEdu (Rama ?c) (Explicacion ?y) (Experto ?x))
-				?f<-(ConsejoRuben (Rama ?r) (Explicacion ?u) (Experto ?v))
-				(test (neq ?c ?r))
-				=>
-				(printout t "Los expertos " ?x " y " ?v " no coinciden en la rama que deberias tomar" crlf)
-				(printout t "El experto " ?x " dice que la mejor rama para ti es " ?c crlf)
-				(printout t "Sus razones son: " ?y crlf)
-				(printout t "Por otro lado, el experto " ?v " te recomienda la rama " ?r crlf)
-				(printout t "Sus razones son: " ?u crlf)
-				(assert (iguales no))
-				(retract ?f)
-			)
+		(defrule imprimir_distintos
+			(declare (salience -9999))
+			?g<-(ConsejoEdu (Rama ?c) (Explicacion ?y) (Experto ?x))
+			?f<-(ConsejoRuben (Rama ?r) (Explicacion ?u) (Experto ?v))
+			(test (neq ?c ?r))
+			=>
+			(printout t "Los expertos " ?x " y " ?v " no coinciden en la rama que deberias tomar" crlf)
+			(printout t "El experto " ?x " dice que la mejor rama para ti es " ?c crlf)
+			(printout t "Sus razones son: " ?y crlf)
+			(printout t "Por otro lado, el experto " ?v " te recomienda la rama " ?r crlf)
+			(printout t "Sus razones son: " ?u crlf)
+			(assert (iguales no))
+			(retract ?f)
+			(retract ?g)
+		)
 
-			(defrule imprimir_restantes_ruben
-				(ConsejoRuben (Rama ?r) (Explicacion ?u) (Experto ?v))
-				(or (iguales si) (iguales no))
-				=>
-				(printout t "Además, el experto " ?v " también te recomienda la rama " ?r crlf)
-				(printout t "Las razones son: " ?u)
-			)
+		(defrule imprimir_restantes_ruben
+			(ConsejoRuben (Rama ?r) (Explicacion ?u) (Experto ?v))
+			(or (iguales si) (iguales no))
+			=>
+			(printout t "Ademas, el experto " ?v " tambien te recomienda la rama " ?r crlf)
+			(printout t "Las razones son: " ?u crlf)
+		)
